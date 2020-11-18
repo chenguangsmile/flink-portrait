@@ -18,7 +18,12 @@ public class MongoUtils {
     private static MongoClient mongoClient = new MongoClient("192.168.88.71",27017);
 
 
-
+    /**
+     * @param tablename 数据库表
+     * @param database  数据库
+     * @param yearbasetype  数据
+     * @return
+     */
     public static Document findoneby(String tablename, String database, String yearbasetype){
         MongoDatabase mongoDatabase = mongoClient.getDatabase(database);
         MongoCollection mongoCollection = mongoDatabase.getCollection(tablename);

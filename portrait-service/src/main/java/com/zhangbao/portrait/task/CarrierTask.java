@@ -1,8 +1,8 @@
 package com.zhangbao.portrait.task;
 
-import com.zhangbao.portrait.entity.YearBase;
-import com.zhangbao.portrait.map.YearBaseMap;
-import com.zhangbao.portrait.reduce.YearBaseReduce;
+import com.zhangbao.portrait.entity.CarrierInfo;
+import com.zhangbao.portrait.map.CarrierMap;
+import com.zhangbao.portrait.reduce.CarrierReduce;
 import com.zhangbao.portrait.utils.MongoUtils;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
@@ -16,7 +16,7 @@ import java.util.List;
  * @author zhangbao
  * @date 2020/11/15 21:19
  **/
-public class YearBaseTask {
+public class CarrierTask {
     public static void main(String[] args) {
         final ParameterTool params = ParameterTool.fromArgs(args);
 
@@ -28,25 +28,25 @@ public class YearBaseTask {
 
         //get input data
         DataSource<String> text = env.readTextFile(params.get("input"));
-        DataSet<YearBase> mapResult = text.map(new YearBaseMap());
-        DataSet<YearBase> reduceResult = mapResult.groupBy("groupField").reduce(new YearBaseReduce());
+        DataSet<CarrierInfo> mapResult = text.map(new CarrierMap());
+        DataSet<CarrierInfo> reduceResult = mapResult.groupBy("groupField").reduce(new CarrierReduce());
         try {
-            List<YearBase> result = reduceResult.collect();
-            for (YearBase yearBase : result) {
-                String yearType = yearBase.getYearType();
-                Long count = yearBase.getCount();
-                Document doc = MongoUtils.findoneby("year-type-statics", "flink-portrait", yearType);
+            List<CarrierInfo> result = reduceResult.collect();
+            for (CarrierInfo carrierInfo : result) {
+                String carrierType = carrierInfo.getCarrier();
+                Long count = carrierInfo.getCount();
+                Document doc = MongoUtils.findoneby("carrier-type-statics", "flink-portrait", carrierType);
                 if(doc == null){
                     doc = new Document();
-                    doc.put("info",yearType);
+                    doc.put("info",carrierType);
                     doc.put("count",count);
                 }else {
                     Long oldCount = doc.getLong("count");
                     doc.put("count",oldCount + count);
                 }
-                MongoUtils.saveorupdatemongo("year-type-statics", "flink-portrait",doc);
+                MongoUtils.saveorupdatemongo("carrier-type-statics", "flink-portrait",doc);
             }
-            env.execute("year base task");
+            env.execute("carrier type task");
         } catch (Exception e) {
             e.printStackTrace();
         }
