@@ -3,10 +3,7 @@ package com.zhangbao.portrait.utils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
-import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
 
@@ -38,6 +35,20 @@ public class HBaseUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String getdata(String tablename, String rowkey, String famliyname,String colum) throws Exception {
+        Table table = conn.getTable(TableName.valueOf(tablename));
+        // 将字符串转换成byte[]
+        byte[] rowkeybyte = Bytes.toBytes(rowkey);
+        Get get = new Get(rowkeybyte);
+        Result result =table.get(get);
+        byte[] resultbytes = result.getValue(famliyname.getBytes(),colum.getBytes());
+        if(resultbytes == null){
+            return null;
+        }
+
+        return new String(resultbytes);
     }
 
     public static void putData(String tableName, String row, String columnFamily, String column, String data)

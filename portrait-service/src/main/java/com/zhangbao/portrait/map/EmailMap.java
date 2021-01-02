@@ -40,7 +40,7 @@ public class EmailMap implements MapFunction<String, EmailInfo> {
         EmailInfo emailInfo = new EmailInfo();
         emailInfo.setCount(1L);
         emailInfo.setEmailType(emailType);
-        emailInfo.setGroupField("emailInfo=" + emailType);
+        emailInfo.setGroupField("emailInfo==" + emailType);
         return emailInfo;
     }
 

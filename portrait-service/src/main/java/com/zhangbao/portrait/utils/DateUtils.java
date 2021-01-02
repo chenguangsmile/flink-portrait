@@ -1,5 +1,6 @@
 package com.zhangbao.portrait.utils;
 
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,11 @@ import java.time.LocalDateTime;
  **/
 public class DateUtils extends DateUtil {
 
+    /**
+     * 获取年龄对应的年代
+     * @param age
+     * @return
+     */
     public static String getYearBaseByAge(String age){
         String yearBaseType = "未知";
         LocalDateTime now = LocalDateTime.now();
@@ -35,8 +41,27 @@ public class DateUtils extends DateUtil {
         return yearBaseType;
     }
 
+    /**
+     * 获取两个时间差多天
+     * @param startDateStr
+     * @param endDateStr
+     * @param patterFormat
+     * @return
+     */
+    public static int getDaysBetweenDate(String startDateStr, String endDateStr, String patterFormat){
+        DateTime startDate = DateUtil.parse(startDateStr, patterFormat);
+        DateTime endDate = DateUtil.parse(endDateStr, patterFormat);
+        long l = DateUtil.betweenDay(startDate, endDate, true);
+        Integer value = Integer.valueOf(Long.valueOf(l).toString());
+        return value;
+
+    }
+
     public static void main(String[] args) {
-        System.out.println(getYearBaseByAge("32"));
+        String startStr = "2020-12-01";
+        String endStr = "2020-12-04";
+        long daysBetweenDate = getDaysBetweenDate(startStr, endStr, "yyyy-MM-dd");
+        System.out.println(daysBetweenDate);
     }
 
 }

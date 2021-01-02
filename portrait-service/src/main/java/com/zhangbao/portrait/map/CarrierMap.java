@@ -44,7 +44,7 @@ public class CarrierMap implements MapFunction<String, CarrierInfo> {
         CarrierInfo carrierInfo = new CarrierInfo();
         carrierInfo.setCount(1L);
         carrierInfo.setCarrier(carrierTypeStr);
-        carrierInfo.setGroupField("carrierInfo=" + carrierTypeStr);
+        carrierInfo.setGroupField("carrierInfo==" + carrierTypeStr);
         return carrierInfo;
     }
 

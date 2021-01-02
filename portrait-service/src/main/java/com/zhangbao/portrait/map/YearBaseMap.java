@@ -37,7 +37,7 @@ public class YearBaseMap implements MapFunction<String, YearBase> {
         YearBase yearBase = new YearBase();
         yearBase.setCount(1L);
         yearBase.setYearType(yearType);
-        yearBase.setGroupField("yearBase=" + yearType);
+        yearBase.setGroupField("yearBase==" + yearType);
         return yearBase;
     }
 }
